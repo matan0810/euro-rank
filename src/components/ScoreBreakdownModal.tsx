@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlayerScore, Country } from '../types';
+import Flag from './Flag';
 
 interface Props {
   score: PlayerScore | null;
@@ -67,7 +68,7 @@ export default function ScoreBreakdownModal({ score, countries, onClose }: Props
                         {score.totalScore} pts
                       </span>
                       <span className="text-purple-300/60 text-sm">
-                        {score.percentage}% accuracy
+                        {score.percentage}% דיוק
                       </span>
                     </div>
                   </div>
@@ -84,17 +85,17 @@ export default function ScoreBreakdownModal({ score, countries, onClose }: Props
               <div className="grid grid-cols-3 gap-3 mt-4">
                 {[
                   {
-                    label: 'Exact hits',
+                    label: 'התאמות מדויקות',
                     value: score.breakdown.filter(b => b.basePoints === 10).length,
                     color: 'text-green-400',
                   },
                   {
-                    label: 'Bonus points',
+                    label: 'נקודות בונוס',
                     value: score.breakdown.reduce((sum, b) => sum + b.bonusPoints, 0),
                     color: 'text-yellow-400',
                   },
                   {
-                    label: 'Base points',
+                    label: 'נקודות בסיס',
                     value: score.breakdown.reduce((sum, b) => sum + b.basePoints, 0),
                     color: 'text-purple-300',
                   },
@@ -111,29 +112,29 @@ export default function ScoreBreakdownModal({ score, countries, onClose }: Props
             <div className="px-6 py-3 border-b border-white/5 flex items-center gap-4 text-xs text-white/40">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-sm bg-green-500/40 inline-block" />
-                Exact
+                מדויק
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-sm bg-yellow-500/40 inline-block" />
-                Close (≤2)
+                קרוב (≤2)
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-sm bg-orange-500/40 inline-block" />
-                Off (3-5)
+                סוטה (3-5)
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-sm bg-red-500/40 inline-block" />
-                Far (&gt;5)
+                רחוק (&gt;5)
               </div>
             </div>
 
             {/* Table header */}
             <div className="px-6 py-2 grid grid-cols-12 gap-2 text-xs font-semibold text-purple-300/60 uppercase tracking-wider border-b border-white/5">
               <div className="col-span-1">#</div>
-              <div className="col-span-5">Country</div>
-              <div className="col-span-2 text-center">Actual</div>
-              <div className="col-span-2 text-center">Predicted</div>
-              <div className="col-span-2 text-right">Points</div>
+              <div className="col-span-5">מדינה</div>
+              <div className="col-span-2 text-center">בפועל</div>
+              <div className="col-span-2 text-center">נחזה</div>
+              <div className="col-span-2 text-right">נקודות</div>
             </div>
 
             {/* Breakdown rows */}
@@ -155,7 +156,7 @@ export default function ScoreBreakdownModal({ score, countries, onClose }: Props
                         {index + 1}
                       </div>
                       <div className="col-span-5 flex items-center gap-2">
-                        <span className="text-base">{country?.flag || '🏳'}</span>
+                        <Flag country={country} size="sm" />
                         <span className="text-white/90 font-medium truncate text-xs">
                           {item.countryName}
                         </span>
@@ -193,7 +194,7 @@ export default function ScoreBreakdownModal({ score, countries, onClose }: Props
                 onClick={onClose}
                 className="btn-primary px-6 py-2.5 text-sm"
               >
-                Close
+                סגירה
               </button>
             </div>
           </motion.div>

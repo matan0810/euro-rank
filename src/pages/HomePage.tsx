@@ -28,20 +28,20 @@ export default function HomePage() {
         </div>
 
         <h1 className="text-6xl md:text-7xl font-black mb-4 leading-none">
-          <span className="text-gradient-gold">Euro</span>
-          <span className="text-white">Rank</span>
+          <span className="text-gradient-gold">יורו</span>
+          <span className="text-white">רנק</span>
         </h1>
 
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="h-px w-16 bg-gradient-to-r from-transparent to-purple-500" />
           <span className="text-purple-300 font-semibold tracking-widest text-sm uppercase">
-            Eurovision 2025
+            אירוויזיון 2025
           </span>
           <div className="h-px w-16 bg-gradient-to-l from-transparent to-purple-500" />
         </div>
 
         <p className="text-purple-200/80 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
-          Predict the Eurovision final ranking, compete with friends, and find out who knows their Eurovision best!
+          חזו את הדירוג הסופי של האירוויזיון, התחרו עם חברים, וגלו מי באמת מבין באירוויזיון!
         </p>
       </motion.div>
 
@@ -61,12 +61,12 @@ export default function HomePage() {
             >
               👥
             </div>
-            <h2 className="text-2xl font-bold text-white">Manage Players</h2>
+            <h2 className="text-2xl font-bold text-white">ניהול שחקנים</h2>
             <p className="text-purple-200/70 text-sm leading-relaxed">
-              Add players and enter each person's prediction for the Eurovision final ranking.
+              הוסיפו שחקנים והזינו את החיזוי של כל אחד לדירוג הסופי של האירוויזיון.
             </p>
             <div className="mt-auto btn-primary w-full text-center">
-              Enter Predictions →
+              הזנת חיזויים ←
             </div>
           </div>
         </Link>
@@ -80,12 +80,12 @@ export default function HomePage() {
             >
               🏆
             </div>
-            <h2 className="text-2xl font-bold text-white">Results & Scores</h2>
+            <h2 className="text-2xl font-bold text-white">תוצאות וניקוד</h2>
             <p className="text-purple-200/70 text-sm leading-relaxed">
-              Enter the actual Eurovision results and see who predicted best with the animated leaderboard.
+              הזינו את התוצאות האמיתיות של האירוויזיון וגלו מי חזה הכי טוב בטבלת המובילים.
             </p>
             <div className="mt-auto btn-gold w-full text-center">
-              See Leaderboard →
+              לטבלת המובילים ←
             </div>
           </div>
         </Link>
@@ -99,14 +99,14 @@ export default function HomePage() {
         className="mt-12 max-w-2xl w-full glass rounded-2xl p-6"
       >
         <h3 className="text-center font-bold text-purple-200 mb-4 text-sm uppercase tracking-wider">
-          ✦ Scoring System ✦
+          ✦ שיטת הניקוד ✦
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           {[
-            { label: 'Exact match', pts: '+10 pts', color: 'text-green-400' },
-            { label: 'Off by 1', pts: '+9 pts', color: 'text-yellow-400' },
-            { label: '1st place exact', pts: '+15 bonus', color: 'text-gold-light' },
-            { label: 'Max score', pts: '280 pts', color: 'text-purple-300' },
+            { label: 'התאמה מדויקת', pts: '+10 נק׳', color: 'text-green-400' },
+            { label: 'הפרש של 1', pts: '+9 נק׳', color: 'text-yellow-400' },
+            { label: 'מקום ראשון מדויק', pts: '+15 בונוס', color: 'text-gold-light' },
+            { label: 'ניקוד מקסימלי', pts: '280 נק׳', color: 'text-purple-300' },
           ].map(item => (
             <div key={item.label} className="glass rounded-xl p-3">
               <div className={`text-lg font-bold ${item.color}`}>{item.pts}</div>

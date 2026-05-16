@@ -1,24 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  arrayMove,
-} from '@dnd-kit/sortable';
 import { useAppStore } from '../store';
-import { Country } from '../types';
 import PlayerCard from '../components/PlayerCard';
-import SortableCountry from '../components/SortableCountry';
+import CountryPicker from '../components/CountryPicker';
+import Flag from '../components/Flag';
 
 interface Props {
   store: ReturnType<typeof useAppStore>;
@@ -32,13 +17,9 @@ export default function PlayersPage({ store }: Props) {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [editingPrediction, setEditingPrediction] = useState<string[]>([]);
   const [newCountryName, setNewCountryName] = useState('');
+  const [newCountryNameEn, setNewCountryNameEn] = useState('');
   const [newCountryFlag, setNewCountryFlag] = useState('🏳');
   const [showAddCountry, setShowAddCountry] = useState(false);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
 
   const handleAddPlayer = () => {
     const name = newPlayerName.trim();
@@ -50,14 +31,10 @@ export default function PlayersPage({ store }: Props) {
   const handleEditPlayer = (playerId: string) => {
     const player = players.find(p => p.id === playerId);
     if (!player) return;
-
-    // Initialize prediction: use existing or default to all countries in order
-    const initialPrediction = player.prediction.length === countries.length
-      ? player.prediction
-      : countries.map(c => c.id);
-
+    // Keep only valid country IDs, drop the rest
+    const valid = player.prediction.filter(id => countries.some(c => c.id === id));
     setEditingPlayerId(playerId);
-    setEditingPrediction(initialPrediction);
+    setEditingPrediction(valid);
   };
 
   const handleSavePrediction = () => {
@@ -67,30 +44,15 @@ export default function PlayersPage({ store }: Props) {
     setEditingPrediction([]);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    setEditingPrediction(prev => {
-      const oldIndex = prev.indexOf(active.id as string);
-      const newIndex = prev.indexOf(over.id as string);
-      return arrayMove(prev, oldIndex, newIndex);
-    });
-  };
-
   const handleAddCountry = () => {
     const name = newCountryName.trim();
     if (!name) return;
-    addCountry(name, newCountryFlag);
+    addCountry(name, newCountryFlag, newCountryNameEn.trim() || undefined);
     setNewCountryName('');
+    setNewCountryNameEn('');
     setNewCountryFlag('🏳');
     setShowAddCountry(false);
   };
-
-  // Get country objects in prediction order
-  const predictionCountries: Country[] = editingPrediction
-    .map(id => countries.find(c => c.id === id))
-    .filter((c): c is Country => !!c);
 
   const editingPlayer = players.find(p => p.id === editingPlayerId);
 
@@ -102,9 +64,9 @@ export default function PlayersPage({ store }: Props) {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-4xl font-black text-white mb-2">
-          <span className="text-gradient-purple">Players</span> & Predictions
+          <span className="text-gradient-purple">שחקנים</span> וחיזויים
         </h1>
-        <p className="text-purple-300/70 mb-8">Add players and enter their Eurovision ranking predictions.</p>
+        <p className="text-purple-300/70 mb-8">הוסיפו שחקנים והזינו את חיזויי הדירוג שלהם לאירוויזיון.</p>
       </motion.div>
 
       {/* Prediction editor modal */}
@@ -128,9 +90,11 @@ export default function PlayersPage({ store }: Props) {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-white">
-                      {editingPlayer.name}'s Prediction
+                      החיזוי של {editingPlayer.name}
                     </h2>
-                    <p className="text-purple-300/70 text-sm mt-1">Drag to reorder — 1st place at top</p>
+                    <p className="text-purple-300/70 text-sm mt-1">
+                      הקלידו שם מדינה (עברית/אנגלית) ולחצו Enter — סדר ההוספה הוא הדירוג
+                    </p>
                   </div>
                   <button
                     onClick={() => setEditingPlayerId(null)}
@@ -139,30 +103,18 @@ export default function PlayersPage({ store }: Props) {
                     ✕
                   </button>
                 </div>
+                <div className="mt-3 text-xs text-purple-300/60">
+                  {editingPrediction.length} / {countries.length} מדינות
+                </div>
               </div>
 
-              {/* Sortable list */}
+              {/* Picker */}
               <div className="flex-1 overflow-y-auto p-4">
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd}
-                >
-                  <SortableContext
-                    items={editingPrediction}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    <div className="flex flex-col gap-2">
-                      {predictionCountries.map((country, index) => (
-                        <SortableCountry
-                          key={country.id}
-                          country={country}
-                          position={index + 1}
-                        />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
+                <CountryPicker
+                  countries={countries}
+                  selected={editingPrediction}
+                  onChange={setEditingPrediction}
+                />
               </div>
 
               {/* Footer */}
@@ -171,13 +123,13 @@ export default function PlayersPage({ store }: Props) {
                   onClick={() => setEditingPlayerId(null)}
                   className="flex-1 px-4 py-3 rounded-xl border border-white/20 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200"
                 >
-                  Cancel
+                  ביטול
                 </button>
                 <button
                   onClick={handleSavePrediction}
                   className="flex-1 btn-primary"
                 >
-                  Save Prediction ✓
+                  שמירת חיזוי ✓
                 </button>
               </div>
             </motion.div>
@@ -191,7 +143,7 @@ export default function PlayersPage({ store }: Props) {
           {/* Add player form */}
           <div className="glass rounded-2xl p-4 mb-6 border border-white/10">
             <h3 className="text-sm font-semibold text-purple-300 uppercase tracking-wider mb-3">
-              Add New Player
+              הוספת שחקן חדש
             </h3>
             <div className="flex gap-2">
               <input
@@ -199,7 +151,7 @@ export default function PlayersPage({ store }: Props) {
                 value={newPlayerName}
                 onChange={e => setNewPlayerName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAddPlayer()}
-                placeholder="Player name..."
+                placeholder="שם השחקן..."
                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/60 transition-colors"
               />
               <button
@@ -207,7 +159,7 @@ export default function PlayersPage({ store }: Props) {
                 disabled={!newPlayerName.trim()}
                 className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none px-4 py-2.5"
               >
-                Add
+                הוספה
               </button>
             </div>
           </div>
@@ -222,7 +174,7 @@ export default function PlayersPage({ store }: Props) {
                   className="text-center py-12 text-purple-300/50"
                 >
                   <div className="text-4xl mb-3">👥</div>
-                  <p>No players yet. Add someone above!</p>
+                  <p>אין שחקנים עדיין. הוסיפו מישהו למעלה!</p>
                 </motion.div>
               ) : (
                 players.map(player => (
@@ -244,13 +196,13 @@ export default function PlayersPage({ store }: Props) {
           <div className="glass rounded-2xl p-4 border border-white/10 sticky top-20">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-purple-300 uppercase tracking-wider">
-                Countries ({countries.length})
+                מדינות ({countries.length})
               </h3>
               <button
                 onClick={() => setShowAddCountry(!showAddCountry)}
                 className="text-xs text-purple-400 hover:text-purple-200 transition-colors"
               >
-                {showAddCountry ? '✕ Cancel' : '+ Add'}
+                {showAddCountry ? '✕ ביטול' : '+ הוספה'}
               </button>
             </div>
 
@@ -274,17 +226,25 @@ export default function PlayersPage({ store }: Props) {
                       type="text"
                       value={newCountryName}
                       onChange={e => setNewCountryName(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleAddCountry()}
-                      placeholder="Country name..."
+                      placeholder="שם בעברית..."
                       className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-purple-500/60"
                     />
                   </div>
+                  <input
+                    type="text"
+                    value={newCountryNameEn}
+                    onChange={e => setNewCountryNameEn(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleAddCountry()}
+                    placeholder="Name in English (אופציונלי)"
+                    dir="ltr"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-purple-500/60 mb-2"
+                  />
                   <button
                     onClick={handleAddCountry}
                     disabled={!newCountryName.trim()}
                     className="w-full btn-primary text-sm py-1.5 disabled:opacity-50"
                   >
-                    Add Country
+                    הוספת מדינה
                   </button>
                 </motion.div>
               )}
@@ -296,12 +256,17 @@ export default function PlayersPage({ store }: Props) {
                   key={country.id}
                   className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 group transition-colors"
                 >
-                  <span className="text-lg">{country.flag}</span>
+                  <Flag country={country} size="md" />
                   <span className="flex-1 text-sm text-white/80">{country.name}</span>
+                  {country.nameEn && (
+                    <span className="text-[10px] text-purple-300/40" dir="ltr">
+                      {country.nameEn}
+                    </span>
+                  )}
                   <button
                     onClick={() => removeCountry(country.id)}
                     className="opacity-0 group-hover:opacity-100 text-red-400/60 hover:text-red-400 text-xs transition-all"
-                    title="Remove country"
+                    title="הסרת מדינה"
                   >
                     ✕
                   </button>

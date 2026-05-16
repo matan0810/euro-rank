@@ -1,7 +1,9 @@
 export interface Country {
   id: string;
   name: string;
+  nameEn?: string;
   flag: string;
+  code?: string; // ISO 3166-1 alpha-2, used to render SVG flag images
 }
 
 export interface Player {

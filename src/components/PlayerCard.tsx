@@ -20,7 +20,7 @@ export default function PlayerCard({ player, countries, onEdit, onDelete }: Prop
     ? 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30'
     : 'text-gray-400 bg-gray-400/10 border-gray-400/30';
 
-  const statusLabel = isComplete ? '✓ Complete' : isPartial ? `${predictedCount}/${totalCountries}` : 'No prediction';
+  const statusLabel = isComplete ? '✓ הושלם' : isPartial ? `${predictedCount}/${totalCountries}` : 'אין חיזוי';
 
   return (
     <motion.div
@@ -51,12 +51,12 @@ export default function PlayerCard({ player, countries, onEdit, onDelete }: Prop
             onClick={onEdit}
             className="px-3 py-2 rounded-lg text-sm font-medium text-purple-300 hover:text-white hover:bg-purple-600/30 border border-purple-600/30 hover:border-purple-500/60 transition-all duration-200"
           >
-            {isComplete ? '✏️ Edit' : '📝 Predict'}
+            {isComplete ? '✏️ עריכה' : '📝 חיזוי'}
           </button>
           <button
             onClick={onDelete}
             className="px-2 py-2 rounded-lg text-sm text-red-400/60 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
-            aria-label="Delete player"
+            aria-label="מחיקת שחקן"
           >
             🗑
           </button>

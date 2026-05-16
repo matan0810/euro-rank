@@ -6,8 +6,9 @@
   body {
     background: #0d0221;
     color: #f8fafc;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Heebo', 'Inter', system-ui, sans-serif;
     min-height: 100vh;
+    direction: rtl;
   }
 }
 

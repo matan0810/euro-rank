@@ -4,9 +4,9 @@ export default function NavBar() {
   const location = useLocation();
 
   const links = [
-    { to: '/', label: '✦ Home' },
-    { to: '/players', label: '👥 Players' },
-    { to: '/results', label: '🏆 Results' },
+    { to: '/', label: '✦ דף הבית' },
+    { to: '/players', label: '👥 שחקנים' },
+    { to: '/results', label: '🏆 תוצאות' },
   ];
 
   return (
@@ -14,7 +14,7 @@ export default function NavBar() {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-xl">⭐</span>
-          <span className="font-bold text-lg text-gradient-gold">EuroRank</span>
+          <span className="font-bold text-lg text-gradient-gold">יורורנק</span>
           <span className="text-xs text-purple-300 font-medium">2025</span>
         </Link>
 

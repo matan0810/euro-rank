@@ -13,7 +13,7 @@ const RANK_STYLES = [
     badge: 'bg-yellow-400 text-gray-900',
     glow: '0 0 30px rgba(245, 158, 11, 0.4)',
     medal: '👑',
-    label: '1st',
+    label: 'ראשון',
   },
   {
     border: 'border-gray-300/50',
@@ -21,7 +21,7 @@ const RANK_STYLES = [
     badge: 'bg-gray-300 text-gray-900',
     glow: '0 0 20px rgba(156, 163, 175, 0.3)',
     medal: '🥈',
-    label: '2nd',
+    label: 'שני',
   },
   {
     border: 'border-amber-600/50',
@@ -29,7 +29,7 @@ const RANK_STYLES = [
     badge: 'bg-amber-600 text-white',
     glow: '0 0 20px rgba(180, 83, 9, 0.3)',
     medal: '🥉',
-    label: '3rd',
+    label: 'שלישי',
   },
 ];
 
@@ -38,8 +38,8 @@ export default function Leaderboard({ scores, onPlayerClick }: Props) {
     return (
       <div className="text-center py-16 text-purple-300/50">
         <div className="text-5xl mb-4">🏆</div>
-        <p className="text-lg">No scores to display yet.</p>
-        <p className="text-sm mt-2">Make sure players have predictions entered.</p>
+        <p className="text-lg">אין עדיין ניקוד להצגה.</p>
+        <p className="text-sm mt-2">ודאו שהשחקנים הזינו חיזויים.</p>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function Leaderboard({ scores, onPlayerClick }: Props) {
                   <div className="flex flex-col items-center gap-0.5">
                     <span className="text-2xl">{rankStyle!.medal}</span>
                     {index === 0 && (
-                      <span className="text-xs font-bold text-yellow-400">WINNER</span>
+                      <span className="text-xs font-bold text-yellow-400">המנצח</span>
                     )}
                   </div>
                 ) : (
@@ -129,14 +129,14 @@ export default function Leaderboard({ scores, onPlayerClick }: Props) {
                 </div>
 
                 <div className="flex justify-between mt-1">
-                  <span className="text-xs text-white/40">{score.percentage}% of max</span>
-                  <span className="text-xs text-white/40">max {score.maxScore}</span>
+                  <span className="text-xs text-white/40">{score.percentage}% מהמקסימום</span>
+                  <span className="text-xs text-white/40">מקס׳ {score.maxScore}</span>
                 </div>
               </div>
 
               {/* Arrow */}
               <div className="flex-shrink-0 text-purple-400/40 hover:text-purple-300 transition-colors">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style={{ transform: 'scaleX(-1)' }}>
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
