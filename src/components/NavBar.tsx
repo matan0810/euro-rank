@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { latestYear } from '../data/competitions';
 
 export default function NavBar() {
   const location = useLocation();
@@ -15,7 +16,7 @@ export default function NavBar() {
         <Link to="/" className="flex items-center gap-2">
           <span className="text-xl">⭐</span>
           <span className="font-bold text-lg text-gradient-gold">יורורנק</span>
-          <span className="text-xs text-purple-300 font-medium">2025</span>
+          <span className="text-xs text-purple-300 font-medium">{latestYear}</span>
         </Link>
 
         <div className="flex items-center gap-1">

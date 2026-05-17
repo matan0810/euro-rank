@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { latestYear } from '../data/competitions';
 
 export default function HomePage() {
   return (
@@ -35,7 +36,7 @@ export default function HomePage() {
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="h-px w-16 bg-gradient-to-r from-transparent to-purple-500" />
           <span className="text-purple-300 font-semibold tracking-widest text-sm uppercase">
-            אירוויזיון 2025
+            אירוויזיון {latestYear}
           </span>
           <div className="h-px w-16 bg-gradient-to-l from-transparent to-purple-500" />
         </div>

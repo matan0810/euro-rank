@@ -1,0 +1,51 @@
+{
+  "year": 2026,
+  "countries": [
+    { "id": "albania", "name": "אלבניה", "nameEn": "Albania", "flag": "🇦🇱", "code": "al" },
+    { "id": "australia", "name": "אוסטרליה", "nameEn": "Australia", "flag": "🇦🇺", "code": "au" },
+    { "id": "austria", "name": "אוסטריה", "nameEn": "Austria", "flag": "🇦🇹", "code": "at" },
+    { "id": "belgium", "name": "בלגיה", "nameEn": "Belgium", "flag": "🇧🇪", "code": "be" },
+    { "id": "bulgaria", "name": "בולגריה", "nameEn": "Bulgaria", "flag": "🇧🇬", "code": "bg" },
+    { "id": "croatia", "name": "קרואטיה", "nameEn": "Croatia", "flag": "🇭🇷", "code": "hr" },
+    { "id": "cyprus", "name": "קפריסין", "nameEn": "Cyprus", "flag": "🇨🇾", "code": "cy" },
+    { "id": "czechia", "name": "צ׳כיה", "nameEn": "Czechia", "flag": "🇨🇿", "code": "cz" },
+    { "id": "denmark", "name": "דנמרק", "nameEn": "Denmark", "flag": "🇩🇰", "code": "dk" },
+    { "id": "finland", "name": "פינלנד", "nameEn": "Finland", "flag": "🇫🇮", "code": "fi" },
+    { "id": "france", "name": "צרפת", "nameEn": "France", "flag": "🇫🇷", "code": "fr" },
+    { "id": "germany", "name": "גרמניה", "nameEn": "Germany", "flag": "🇩🇪", "code": "de" },
+    { "id": "greece", "name": "יוון", "nameEn": "Greece", "flag": "🇬🇷", "code": "gr" },
+    { "id": "israel", "name": "ישראל", "nameEn": "Israel", "flag": "🇮🇱", "code": "il" },
+    { "id": "italy", "name": "איטליה", "nameEn": "Italy", "flag": "🇮🇹", "code": "it" },
+    { "id": "lithuania", "name": "ליטא", "nameEn": "Lithuania", "flag": "🇱🇹", "code": "lt" },
+    { "id": "malta", "name": "מלטה", "nameEn": "Malta", "flag": "🇲🇹", "code": "mt" },
+    { "id": "moldova", "name": "מולדובה", "nameEn": "Moldova", "flag": "🇲🇩", "code": "md" },
+    { "id": "norway", "name": "נורווגיה", "nameEn": "Norway", "flag": "🇳🇴", "code": "no" },
+    { "id": "poland", "name": "פולין", "nameEn": "Poland", "flag": "🇵🇱", "code": "pl" },
+    { "id": "romania", "name": "רומניה", "nameEn": "Romania", "flag": "🇷🇴", "code": "ro" },
+    { "id": "serbia", "name": "סרביה", "nameEn": "Serbia", "flag": "🇷🇸", "code": "rs" },
+    { "id": "sweden", "name": "שוודיה", "nameEn": "Sweden", "flag": "🇸🇪", "code": "se" },
+    { "id": "ukraine", "name": "אוקראינה", "nameEn": "Ukraine", "flag": "🇺🇦", "code": "ua" },
+    { "id": "united-kingdom", "name": "בריטניה", "nameEn": "United Kingdom", "flag": "🇬🇧", "code": "gb" }
+  ],
+  "players": [
+    {
+      "id": "player-1778974382871",
+      "name": "עדי",
+      "prediction": ["australia", "finland", "romania", "greece", "israel", "lithuania", "bulgaria", "italy", "france", "ukraine", "denmark", "czechia", "sweden", "moldova", "germany", "malta", "cyprus", "serbia", "norway", "austria", "poland", "croatia", "albania", "belgium", "united-kingdom"]
+    },
+    {
+      "id": "player-1778974384198",
+      "name": "אורי",
+      "prediction": ["finland", "australia", "romania", "france", "greece", "moldova", "israel", "italy", "bulgaria", "albania", "sweden", "lithuania", "malta", "czechia", "denmark", "ukraine", "germany", "serbia", "cyprus", "poland", "norway", "austria", "croatia", "belgium", "united-kingdom"]
+    },
+    {
+      "id": "player-1778974385610",
+      "name": "מתן",
+      "prediction": ["finland", "australia", "greece", "romania", "israel", "bulgaria", "moldova", "italy", "france", "ukraine", "denmark", "sweden", "lithuania", "austria", "serbia", "croatia", "poland", "norway", "albania", "czechia", "malta", "cyprus", "germany", "belgium", "united-kingdom"]
+    }
+  ],
+  "results": {
+    "finalOrder": ["bulgaria", "israel", "romania", "australia", "italy", "finland", "denmark", "moldova", "ukraine", "greece", "france", "poland", "albania", "norway", "croatia", "czechia", "serbia", "malta", "cyprus", "sweden", "belgium", "lithuania", "germany", "austria", "united-kingdom"],
+    "calculatedAt": "2026-05-16T22:00:00.000Z"
+  }
+}

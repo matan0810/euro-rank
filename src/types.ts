@@ -36,7 +36,15 @@ export interface CountryScore {
   totalPoints: number;
 }
 
+export interface Competition {
+  year: number;
+  countries: Country[];
+  players: Player[];
+  results: Results | null;
+}
+
 export type AppState = {
+  year: number;
   countries: Country[];
   players: Player[];
   results: Results | null;

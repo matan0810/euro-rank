@@ -72,11 +72,6 @@ export default function ResultsPage({ store }: Props) {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h2 className="text-lg font-bold text-white">תוצאות רשמיות</h2>
-                  {!isEditing && results && (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-400/90 bg-green-400/10 border border-green-400/30 rounded-full px-2 py-0.5">
-                      🔒 נעול
-                    </span>
-                  )}
                   {isEditing && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-yellow-400/90 bg-yellow-400/10 border border-yellow-400/30 rounded-full px-2 py-0.5">
                       ✏ עריכה
@@ -87,7 +82,7 @@ export default function ResultsPage({ store }: Props) {
                   {isEditing
                     ? `הקלידו שם מדינה (עברית/אנגלית) או גררו לסידור • ${draftOrder.length}/${countries.length}`
                     : results
-                    ? 'הדירוג נעול. לחצו "ערוך" כדי לשנות.'
+                    ? 'לחצו "ערוך" כדי לשנות את הדירוג.'
                     : 'אין דירוג עדיין — היכנסו למצב עריכה כדי להזין.'}
                 </p>
               </div>
@@ -151,19 +146,20 @@ export default function ResultsPage({ store }: Props) {
                       💾 שמירה
                     </button>
                   </div>
+                  {results && (
+                    <button
+                      onClick={handleReset}
+                      className="w-full px-4 py-2 rounded-xl border border-red-500/30 text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 text-xs"
+                    >
+                      איפוס תוצאות
+                    </button>
+                  )}
                 </>
-              ) : results ? (
-                <button
-                  onClick={handleReset}
-                  className="w-full px-4 py-2.5 rounded-xl border border-red-500/30 text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 text-sm"
-                >
-                  איפוס תוצאות
-                </button>
-              ) : (
+              ) : !results ? (
                 <button onClick={handleStartEdit} className="btn-gold w-full">
                   🏆 התחל להזין תוצאות
                 </button>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

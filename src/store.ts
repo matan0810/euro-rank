@@ -1,116 +1,57 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AppState, Country, Player, Results, PlayerScore, CountryScore } from './types';
+import { competitions, latestYear, years } from './data/competitions';
 
-// 25 finalists of Eurovision 2026 (Grand Final, Vienna, 16 May 2026)
-const DEFAULT_COUNTRIES: Country[] = [
-  { id: 'albania', name: 'אלבניה', nameEn: 'Albania', flag: '🇦🇱', code: 'al' },
-  { id: 'australia', name: 'אוסטרליה', nameEn: 'Australia', flag: '🇦🇺', code: 'au' },
-  { id: 'austria', name: 'אוסטריה', nameEn: 'Austria', flag: '🇦🇹', code: 'at' },
-  { id: 'belgium', name: 'בלגיה', nameEn: 'Belgium', flag: '🇧🇪', code: 'be' },
-  { id: 'bulgaria', name: 'בולגריה', nameEn: 'Bulgaria', flag: '🇧🇬', code: 'bg' },
-  { id: 'croatia', name: 'קרואטיה', nameEn: 'Croatia', flag: '🇭🇷', code: 'hr' },
-  { id: 'cyprus', name: 'קפריסין', nameEn: 'Cyprus', flag: '🇨🇾', code: 'cy' },
-  { id: 'czechia', name: 'צ׳כיה', nameEn: 'Czechia', flag: '🇨🇿', code: 'cz' },
-  { id: 'denmark', name: 'דנמרק', nameEn: 'Denmark', flag: '🇩🇰', code: 'dk' },
-  { id: 'finland', name: 'פינלנד', nameEn: 'Finland', flag: '🇫🇮', code: 'fi' },
-  { id: 'france', name: 'צרפת', nameEn: 'France', flag: '🇫🇷', code: 'fr' },
-  { id: 'germany', name: 'גרמניה', nameEn: 'Germany', flag: '🇩🇪', code: 'de' },
-  { id: 'greece', name: 'יוון', nameEn: 'Greece', flag: '🇬🇷', code: 'gr' },
-  { id: 'israel', name: 'ישראל', nameEn: 'Israel', flag: '🇮🇱', code: 'il' },
-  { id: 'italy', name: 'איטליה', nameEn: 'Italy', flag: '🇮🇹', code: 'it' },
-  { id: 'lithuania', name: 'ליטא', nameEn: 'Lithuania', flag: '🇱🇹', code: 'lt' },
-  { id: 'malta', name: 'מלטה', nameEn: 'Malta', flag: '🇲🇹', code: 'mt' },
-  { id: 'moldova', name: 'מולדובה', nameEn: 'Moldova', flag: '🇲🇩', code: 'md' },
-  { id: 'norway', name: 'נורווגיה', nameEn: 'Norway', flag: '🇳🇴', code: 'no' },
-  { id: 'poland', name: 'פולין', nameEn: 'Poland', flag: '🇵🇱', code: 'pl' },
-  { id: 'romania', name: 'רומניה', nameEn: 'Romania', flag: '🇷🇴', code: 'ro' },
-  { id: 'serbia', name: 'סרביה', nameEn: 'Serbia', flag: '🇷🇸', code: 'rs' },
-  { id: 'sweden', name: 'שוודיה', nameEn: 'Sweden', flag: '🇸🇪', code: 'se' },
-  { id: 'ukraine', name: 'אוקראינה', nameEn: 'Ukraine', flag: '🇺🇦', code: 'ua' },
-  { id: 'united-kingdom', name: 'בריטניה', nameEn: 'United Kingdom', flag: '🇬🇧', code: 'gb' },
-];
+const STORAGE_PREFIX = 'eurorank_state_he_';
+const LEGACY_KEYS = ['eurorank_state_he', 'eurorank_state_he_v2', 'eurorank_state_he_v3'];
 
-// Official Eurovision 2026 Grand Final ranking (1st → 25th)
-const OFFICIAL_2026_RESULTS: Results = {
-  finalOrder: [
-    'bulgaria',       // 1 — Dara "Bangaranga" — 516
-    'israel',         // 2 — Noam Bettan "Michelle" — 343
-    'romania',        // 3 — Alexandra Căpitănescu "Choke Me" — 296
-    'australia',      // 4 — Delta Goodrem "Eclipse" — 287
-    'italy',          // 5 — Sal Da Vinci "Per sempre sì" — 281
-    'finland',        // 6 — Linda Lampenius & Pete Parkkonen "Liekinheitin" — 279
-    'denmark',        // 7 — Søren Torpegaard Lund "Før vi går hjem" — 243
-    'moldova',        // 8 — Satoshi "Viva, Moldova" — 226
-    'ukraine',        // 9 — Leléka "Ridnym" — 221
-    'greece',         // 10 — Akylas "Ferto" — 220
-    'france',         // 11 — Monroe "Regarde !" — 158
-    'poland',         // 12 — Alicja "Pray" — 150
-    'albania',        // 13 — Alis "Nân" — 145
-    'norway',         // 14 — Jonas Lovv "Ya ya ya" — 134
-    'croatia',        // 15 — Lelek "Andromeda" — 124
-    'czechia',        // 16 — Daniel Žižka "Crossroads" — 113
-    'serbia',         // 17 — Lavina "Kraj mene" — 90
-    'malta',          // 18 — Aidan "Bella" — 89
-    'cyprus',         // 19 — Antigoni "Jalla" — 75
-    'sweden',         // 20 — Felicia "My System" — 51
-    'belgium',        // 21 — Essyla "Dancing on the Ice" — 36
-    'lithuania',      // 22 — Lion Ceccah "Sólo quiero más" — 22
-    'germany',        // 23 — Sarah Engels "Fire" — 12
-    'austria',        // 24 — Cosmó "Tanzschein" — 6
-    'united-kingdom', // 25 — Look Mum No Computer "Eins, Zwei, Drei" — 1
-  ],
-  calculatedAt: '2026-05-16T22:00:00.000Z',
-};
+function storageKey(year: number) {
+  return `${STORAGE_PREFIX}${year}`;
+}
 
-const STORAGE_KEY = 'eurorank_state_he_v3';
-const LEGACY_KEYS = ['eurorank_state_he', 'eurorank_state_he_v2'];
+function baselineFor(year: number): AppState {
+  const c = competitions[year];
+  if (!c) {
+    return { year, countries: [], players: [], results: null };
+  }
+  return {
+    year,
+    countries: c.countries,
+    players: c.players,
+    results: c.results,
+  };
+}
 
-function loadState(): AppState {
+function loadState(year: number): AppState {
   try {
     LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(year));
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<AppState>;
-      const cached = parsed.countries;
-      // Sanity: if cached country list is missing 'bulgaria' (the 2026 winner) or
-      // lacks ISO codes, treat as obsolete and refresh from defaults.
-      const isStale =
-        !cached ||
-        !cached.some(c => c.id === 'bulgaria') ||
-        !cached.every(c => !!c.code);
-      if (isStale) {
-        return {
-          countries: DEFAULT_COUNTRIES,
-          players: (parsed.players || []).map(p => ({ ...p, prediction: [] })),
-          results: OFFICIAL_2026_RESULTS,
-        };
-      }
+      const baseline = baselineFor(year);
       return {
-        countries: cached,
-        players: parsed.players || [],
-        results: parsed.results === undefined ? OFFICIAL_2026_RESULTS : parsed.results,
+        year,
+        countries: parsed.countries ?? baseline.countries,
+        players: parsed.players ?? baseline.players,
+        results: parsed.results === undefined ? baseline.results : parsed.results,
       };
     }
   } catch {
     // ignore
   }
-  return {
-    countries: DEFAULT_COUNTRIES,
-    players: [],
-    results: OFFICIAL_2026_RESULTS,
-  };
+  return baselineFor(year);
 }
 
 function saveState(state: AppState) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(storageKey(state.year), JSON.stringify(state));
   } catch {
     // ignore
   }
 }
 
 export function useAppStore() {
-  const [state, setState] = useState<AppState>(loadState);
+  const [state, setState] = useState<AppState>(() => loadState(latestYear));
 
   useEffect(() => {
     saveState(state);
@@ -118,6 +59,22 @@ export function useAppStore() {
 
   const updateState = useCallback((updater: (prev: AppState) => AppState) => {
     setState(updater);
+  }, []);
+
+  // Year management
+  const setYear = useCallback((year: number) => {
+    setState(loadState(year));
+  }, []);
+
+  const resetYear = useCallback(() => {
+    setState(prev => {
+      try {
+        localStorage.removeItem(storageKey(prev.year));
+      } catch {
+        // ignore
+      }
+      return baselineFor(prev.year);
+    });
   }, []);
 
   // Country management
@@ -186,6 +143,9 @@ export function useAppStore() {
 
   return {
     state,
+    availableYears: years,
+    setYear,
+    resetYear,
     addCountry,
     removeCountry,
     setCountries,
